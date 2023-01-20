@@ -6,7 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -19,8 +21,23 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'date',
+        'phone_number',
         'password',
     ];
+
+    public function findForPassport($username)
+    {
+        $column = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        return $this->where($column, $username)->first();
+    }
+
+
+    public function validateForPassportPasswordGrant($password)
+    {
+        return Hash::check($password, $this->password);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

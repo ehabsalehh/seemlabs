@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\PartOne;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReduceToZeroRequest;
 use Illuminate\Http\Request;
 
 class ReduceToZeroController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(ReduceToZeroRequest $request)
     {
-        $this->validate()
         $result = [];
         foreach ($request->get('Q') as $x) {
             $steps = 0;
@@ -24,7 +24,6 @@ class ReduceToZeroController extends Controller
                     $x -= 1;
                 endif;
                 $steps += 1;
-                // result.append(steps)
             }
             $result[] = $steps;
 
